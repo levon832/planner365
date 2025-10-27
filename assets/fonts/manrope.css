@@ -1,0 +1,15 @@
+
+@font-face{
+  font-family:'Manrope'; font-style:normal; font-weight:400; font-display:swap;
+  src: local('Manrope Regular'), local('Manrope'), url('https://fonts.gstatic.com/s/manrope/v14/xn7gYHE41ni1AdIRggexS1zGxv1N.woff2') format('woff2');
+}
+@font-face{
+  font-family:'Manrope'; font-style:normal; font-weight:600; font-display:swap;
+  src: local('Manrope SemiBold'), local('Manrope'), url('https://fonts.gstatic.com/s/manrope/v14/xn7gYHE41ni1AdIRggexS1zGxv1N.woff2') format('woff2');
+}
+@font-face{
+  font-family:'Manrope'; font-style:normal; font-weight:800; font-display:swap;
+  src: local('Manrope ExtraBold'), local('Manrope'), url('https://fonts.gstatic.com/s/manrope/v14/xn7gYHE41ni1AdIRggexS1zGxv1N.woff2') format('woff2');
+}
+:root { --font-ui: 'Manrope', system-ui, -apple-system, 'Segoe UI', Roboto, Arial, sans-serif; }
+body,button,input,textarea { font-family: var(--font-ui); }

@@ -1,0 +1,132 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;700&display=swap&subset=cyrillic" rel="stylesheet">
+<style> body { font-family: 'Manrope', system-ui, sans-serif; } </style>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Планнер 365</title>
+  <meta name="theme-color" content="#0b1226">
+  <link rel="icon" href="assets/favicon.png">
+  <link rel="manifest" href="manifest.json">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <!-- Onboarding -->
+  <div id="onboard" class="onboard hidden">
+    <div class="onboard-card">
+      <div class="brand-lg">Планнер 365</div>
+      <h1>Добро пожаловать в Планнер 365!</h1>
+      <p class="muted">Как тебя зовут?</p>
+      <input id="onbName" placeholder="Имя">
+      <input id="onbGoal" placeholder="Цель">
+      <button id="onbStart">Начать</button>
+    </div>
+  </div>
+
+  <div class="app">
+    <header class="topbar">
+      <div class="top-title">   ݧѧߧߧ֧  365</div>
+      <div class="top-icons">
+        <button class="icon-btn" data-view="ach" title="      ڧا֧ߧڧ "> 9 6</button>
+        <button class="icon-btn" data-view="hero" title="        ԧ֧   "> 8 2</button>
+        <button class="icon-btn" id="profBtn" title="      ڧݧ "> 9 4</button>
+      </div>
+    </header>
+
+    <main class="content" id="content">
+      
+      <!--    ֧ߧ  -->
+      <section id="dayView" class="view active">
+        <h2>   ֧ԧ էߧ </h2>
+        <ul id="tasks"></ul>
+        <div class="controls">
+          <input id="newTask" placeholder="    ӧѧ   ٧ѧէѧ  ...">
+          <button id="addTask">    ҧѧӧڧ  </button>
+        </div>
+      </section>
+
+      <!--    ֧է֧ݧ  -->
+      <section id="weekView" class="view">
+        <h2>   ֧է֧ݧ </h2>
+        <canvas id="weekChart" width="960" height="280"></canvas>
+      </section>
+
+      <!--    ֧    -->
+      <section id="monthView" class="view">
+        <h2>   ֧   </h2>
+        <canvas id="monthChart" width="960" height="280"></canvas>
+      </section>
+
+      <!--    ӧ֧    -->
+      <section id="questsView" class="view">
+        <h2>   ӧ֧   </h2>
+        <div class="muted">    ݧߧѧ   ݧ ԧڧܧ   ҧ է֧     v3.0.    ֧ۧ ѧ      ҧѧ٧   ڧߧ ֧  ֧ۧ  .</div>
+      </section>
+
+      <!--     ܧ   -->
+      <section id="focusView" class="view">
+        <h2>    ܧ  </h2>
+        <div class="muted">    ާ է     ҧ է֧     v3.0</div>
+      </section>
+
+      <!--         ԧ֧    -->
+      <section id="heroView" class="view">
+        <h2>        ԧ֧   </h2>
+        <div class="hero-card">
+          <div class="hero-title">     ӧ֧ߧ : <span id="heroLevel">1</span></div>
+          <div class="hero-progress"><div id="heroBar"></div></div>
+          <div class="hero-meta muted" id="heroMeta">0 / 100 xp</div>
+        </div>
+      </section>
+
+      <!--       ڧا֧ߧڧ  -->
+      <section id="achView" class="view">
+        <h2>      ڧا֧ߧڧ </h2>
+        <div id="achGrid" class="ach-grid"></div>
+      </section>
+
+      <!--       ڧݧ  ( ާڧߧ - ާ էѧݧܧ ) -->
+      <div id="profileModal" class="profile-modal hidden">
+        <div class="modal-card">
+          <div class="modal-head">
+            <div class="avatar-wrap"><img id="avatar" alt=""></div>
+            <div class="profile-mini">
+              <div class="name" id="profNameView"></div>
+              <div class="goal muted" id="profGoalView"></div>
+            </div>
+            <button id="modalClose" class="close"> 7 9</button>
+          </div>
+          <div class="modal-body">
+            <label>Имя</label>
+            <input id="profName" placeholder="Ваше имя">
+            <label>Цель</label>
+            <input id="profGoal" placeholder="Главная цель">
+            <label class="file-label">Аватар</label>
+            <input type="file" id="avatarInput" accept="image/*">
+            <div class="modal-actions">
+              <button id="shareBtn">Поделиться Планнером 365</button>
+              <button id="saveProfile">Сохранить</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </main>
+
+    <!--    ڧاߧ    ߧѧӧڧԧѧ ڧ  -->
+    <footer class="bottom-nav" id="bottomNav">
+      <button class="tab active" data-view="day">
+        <span class="ico"> 7 3</span><span>   ֧ߧ </span><b class="badge" id="dayBadge" hidden>0</b>
+      </button>
+      <button class="tab" data-view="week"><span class="ico"> 9 6</span><span>   ֧ </span></button>
+      <button class="tab" data-view="month"><span class="ico"> 9 1</span><span>   ֧ </span></button>
+      <button class="tab" data-view="quests"><span class="ico"> 9 5</span><span>   ӧ֧   </span></button>
+      <button class="tab" data-view="focus"><span class="ico"> 7 5</span><span>    ܧ  </span></button>
+    </footer>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>
