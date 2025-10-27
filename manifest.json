@@ -1,12 +1,10 @@
 {
   "name": "Планнер 365",
-  "short_name": "Planner365",
-  "description": "Планнер 365 — управление задачами, путь героя, достижения. Быстрый и фокусный планировщик.",
-  "start_url": "./index.html",
+  "short_name": "Planner 365",
+  "start_url": "index.html",
   "display": "standalone",
-  "background_color": "#0b1226",
-  "theme_color": "#0b1226",
-  "orientation": "portrait-primary",
+  "background_color": "#0f1720",
+  "theme_color": "#0f1720",
   "icons": [
     {
       "src": "assets/icon-192.png",
