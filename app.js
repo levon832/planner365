@@ -25,11 +25,11 @@ function load(){
 
 /* === Default quests === */
 const QUESTS = [
-  {id:1,title:"Главная задача",xp:25,icon:"✅"},
-  {id:2,title:"Читать 20 минут",xp:10,icon:"📚"},
-  {id:3,title:"10 000 шагов",xp:10,icon:"🚶"},
-  {id:4,title:"Спорт 30 мин",xp:15,icon:"💪"},
-  {id:5,title:"Учёба 45 мин",xp:20,icon:"🎓"}
+  {id:1,title:"   荮学缨擐学   侑学乍学  ",xp:25,icon:" 7 3"},
+  {id:2,title:"   讧 学   20  蕨讧擐  ",xp:10,icon:" 9 2"},
+  {id:3,title:"10 000   学鸳  ",xp:10,icon:" 0 8"},
+  {id:4,title:"        30  蕨讧 ",xp:15,icon:" 9 4"},
+  {id:5,title:"    拽咬  45  蕨讧 ",xp:20,icon:" 9 5"}
 ];
 
 function ensureQuests(){
@@ -120,11 +120,11 @@ function renderQuests(){
     row.className="quest-card";
     row.innerHTML=`
       <div class="q-title">${q.icon} ${q.title}</div>
-      <div class="q-meta muted">🔥 стрик: ${q.streak}</div>
+      <div class="q-meta muted"> 9 7     讧 : ${q.streak}</div>
     `;
     const btn=document.createElement("button");
     btn.className="q-btn";
-    btn.textContent=q.doneToday?"Выполнено":"Отметить";
+    btn.textContent=q.doneToday?"      荮擐支擐 ":"    蕨支 讧  ";
     btn.disabled=q.doneToday;
     btn.onclick=()=>markQuestDone(q.id);
     row.appendChild(btn);
@@ -134,7 +134,7 @@ function renderQuests(){
 
 /* === Profile === */
 function renderProfileMini(){
-  $("#profNameView").textContent=state.profile.name||"Без имени";
+  $("#profNameView").textContent=state.profile.name||"   支   讧蕨支擐 ";
   $("#profGoalView").textContent=state.profile.goal||"";
   const av=$("#avatar");
   if(state.profile.avatar) av.src=state.profile.avatar;
@@ -173,11 +173,11 @@ function tabsInit(){
   });
 }
 
-/* === Onboarding — fixed === */
+/* === Onboarding    fixed === */
 function handleStart(){
   const name=$("#onbName").value.trim();
   const goal=$("#onbGoal").value.trim();
-  if(!name){alert("Введите имя");return;}
+  if(!name){alert("   缨支乍讧    讧蕨 ");return;}
   state.profile.name=name;
   state.profile.goal=goal;
   save();
@@ -185,9 +185,28 @@ function handleStart(){
   renderProfileMini();
   switchView("day");
 }
-function setupOnboard(){
-  const btn=$("#onbStart");
-  if(btn) btn.onclick=handleStart;
+function setupOnboard() {
+  const btn = document.getElementById('onbStart');
+  if (!btn) return;
+
+  btn.addEventListener("click", () => {
+    const name = document.getElementById("onbName").value.trim();
+    const goal = document.getElementById("onbGoal").value.trim();
+
+    if (!name) {
+      alert("袙胁械写懈褌械 懈屑褟");
+      return;
+    }
+
+    state.profile.name = name;
+    state.profile.goal = goal;
+
+    save();
+    renderProfileMini();
+
+    document.getElementById("onboard").classList.add("hidden");
+    switchView("day");
+  });
 }
 function showOnboardIfNeeded(){
   if(!state.profile.name){
@@ -227,5 +246,6 @@ function init(){
   renderQuests();
   updateHero();
   showOnboardIfNeeded();
+  setupOnboard();
 }
 document.addEventListener("DOMContentLoaded",init);
