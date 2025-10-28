@@ -248,6 +248,7 @@ function showOnboardIfNeeded(){
     ob.classList.remove("hidden");
   }else{
     ob.classList.add("hidden");
+ob.style.display = "none";;
     switchView("day");
   }
 }
