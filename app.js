@@ -249,6 +249,14 @@ function showOnboardIfNeeded(){
   }else{
     ob.classList.add("hidden");
 ob.style.display = "none";;
+     const ob = document.getElementById("onboard");
+if (ob) {
+  ob.classList.add("hidden");
+  ob.style.display = "none";
+}
+
+switchView("day");  
+document.getElementById("dayView").classList.add("active");
     switchView("day");
   }
 }
@@ -278,6 +286,8 @@ function bindOnboardButton(){
     renderProfileMini();
     switchView("day");
   });
+   switchView("day");
+document.getElementById("dayView").classList.add("active");
 }
 
 /* --- Welcome overlay (auto-destroys) --- */
