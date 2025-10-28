@@ -346,4 +346,4 @@ function init(){
   updateHero();
 }
 
-document.addEventListener("DOMContentLoaded", init);
+window.addEventListener("load", init);
