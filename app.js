@@ -337,11 +337,28 @@ function init(){
 
   $("#profBtn")?.addEventListener("click", ()=> $("#profileModal")?.classList.remove("hidden"));
   $("#modalClose")?.addEventListener("click", closeProfile);
-  $("#saveProfile")?.addEventListener("click", ()=>{
-    state.profile.name = ($("#profName")?.value || "").trim();
-    state.profile.goal = ($("#profGoal")?.value || "").trim();
-    save(); renderProfileMini(); closeProfile();
-  });
+  document.getElementById("saveProfile").onclick = () => {
+  const name = ($("#profName")?.value || "").trim();
+  const goal = ($("#profGoal")?.value || "").trim();
+
+  if (!name) {
+    alert("Введите имя");
+    return;
+  }
+  if (!goal) {
+    alert("Введите главную цель");
+    return;
+  }
+
+  state.profile.name = name;
+  state.profile.goal = goal;
+  save();
+  renderProfileMini();
+  closeProfile();
+
+  // ✅ Обновление вкладки «День»
+  switchView("day");
+};
   $("#shareBtn")?.addEventListener("click", ()=> alert("Поделиться добавим позже 👀"));
 
   attachAvatar();
