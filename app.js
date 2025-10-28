@@ -31,6 +31,12 @@ function load(){
   if (!state.ui) state.ui = { lastDay: null };
 }
 
+function closeProfile() {
+  const modal = document.getElementById("profileModal");
+  if (!modal) return;
+  modal.classList.add("hidden");
+  modal.style.display = "none";
+}
 /* --- Charts (compact impl) --- */
 function drawComboChart(canvas, rows, labels){
   if(!canvas || !canvas.getContext) return;
@@ -212,8 +218,6 @@ function attachAvatar(){
     r.readAsDataURL(f);
   });
 }
-function closeProfile(){ $("#profileModal")?.classList.add("hidden"); }
-
 /* --- Tabs --- */
 function switchView(v){
   $$(".view").forEach(x=>x.classList.remove("active"));
@@ -336,7 +340,9 @@ function init(){
   $("#newTask")?.addEventListener("keydown", (e)=>{ if(e.key==="Enter") $("#addTask").click(); });
 
   $("#profBtn")?.addEventListener("click", ()=> $("#profileModal")?.classList.remove("hidden"));
-  $("#modalClose")?.addEventListener("click", closeProfile);
+  document.getElementById("modalClose").onclick = () => {
+  closeProfile();
+};
   document.getElementById("saveProfile").onclick = () => {
   const name = ($("#profName")?.value || "").trim();
   const goal = ($("#profGoal")?.value || "").trim();
