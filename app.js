@@ -244,60 +244,60 @@ function tabsInit(){
   });
 }
 
-/* --- Onboarding (goal required + animation) --- */
-function showOnboardIfNeeded(){
-function showOnboardIfNeeded(){
-  if(!state.profile.name || !state.profile.goal){
+// === PATCH START: Onboarding + Init (v3.2.1) ===
+
+// Показ / скрытие онбординга (цель обязательна)
+function showOnboardIfNeeded() {
+  const ob = document.getElementById("onboard");
+  if (!ob) return;
+
+  if (!state.profile?.name || !state.profile?.goal) {
     ob.classList.remove("hidden");
-  }else{
+    ob.style.display = "grid";
+  } else {
     ob.classList.add("hidden");
+    ob.style.display = "none";
     switchView("day");
   }
 }
-function bindOnboardButton(){
-  const btn = $("#onbStart");
-  if(!btn) return;
-  // снимаем возможные старые обработчики
+
+// Привязка кнопки "Начать"
+function bindOnboardButton() {
+  const btn = document.getElementById("onbStart");
+  if (!btn) return;
+
+  // снимаем старые обработчики (если были)
   const fresh = btn.cloneNode(true);
   btn.parentNode.replaceChild(fresh, btn);
 
-  fresh.addEventListener("click", ()=>{
-    const name = ($("#onbName")?.value || "").trim();
-    const goal = ($("#onbGoal")?.value || "").trim();
+  fresh.addEventListener("click", () => {
+    const name = (document.getElementById("onbName")?.value || "").trim();
+    const goal = (document.getElementById("onbGoal")?.value || "").trim();
 
-    if(!name){ alert("Введите имя"); return; }
-    if(!goal){ alert("Введите вашу главную цель"); return; } // цель обязательна
+    if (!name) { alert("Введите имя"); return; }
+    if (!goal) { alert("Введите главную цель"); return; }
 
     state.profile.name = name;
     state.profile.goal = goal;
     save();
-
-    // анимация поздравления
-    playWelcomeOverlay(name, goal);
-
-    // скрываем онбординг и стартуем «День»
-    $("#onboard")?.classList.add("hidden");
     renderProfileMini();
+
+    const ob = document.getElementById("onboard");
+    if (ob) { ob.classList.add("hidden"); ob.style.display = "none"; }
+
+    // короткое приветствие и переход на День
+    playWelcomeOverlay(name, goal);
     switchView("day");
+    document.getElementById("dayView")?.classList.add("active");
   });
-   switchView("day");
-document.getElementById("dayView").classList.add("active");
 }
 
-/* --- Welcome overlay (auto-destroys) --- */
-function playWelcomeOverlay(name, goal){
+// Небольшой оверлей-приветствие (сам скрывается)
+function playWelcomeOverlay(name, goal) {
   const ov = document.createElement("div");
-  ov.style.cssText = `
-    position:fixed; inset:0; display:grid; place-items:center;
-    background:rgba(5,10,25,.88); z-index:9999; transition:opacity .5s ease;
-  `;
+  ov.style.cssText = "position:fixed;inset:0;display:grid;place-items:center;background:rgba(5,10,25,.88);z-index:9999;transition:opacity .5s";
   const card = document.createElement("div");
-  card.style.cssText = `
-    background:#0f1938; border:1px solid rgba(255,255,255,.12);
-    border-radius:18px; padding:22px; width:min(520px,92vw);
-    text-align:center; box-shadow:0 30px 80px rgba(0,0,0,.5);
-    font-family:Manrope, system-ui, sans-serif;
-  `;
+  card.style.cssText = "background:#0f1938;border:1px solid rgba(255,255,255,.12);border-radius:18px;padding:22px;width:min(520px,92vw);text-align:center;box-shadow:0 30px 80px rgba(0,0,0,.5);font-family:Manrope,system-ui,sans-serif";
   card.innerHTML = `
     <div style="font-size:18px;opacity:.8;margin-bottom:6px">Планнер 365</div>
     <div style="font-size:24px;font-weight:800;margin-bottom:8px">Добро пожаловать, ${name}!</div>
@@ -305,68 +305,90 @@ function playWelcomeOverlay(name, goal){
   `;
   ov.appendChild(card);
   document.body.appendChild(ov);
-  // авто-скрытие
-  setTimeout(()=>{ ov.style.opacity="0"; }, 1200);
-  setTimeout(()=>{ ov.remove(); }, 1800);
+  setTimeout(() => { ov.style.opacity = "0"; }, 1200);
+  setTimeout(() => { ov.remove(); }, 1800);
 }
 
-/* --- Init --- */
-function init(){
+// Закрытие модалки профиля (жёстко)
+function closeProfile() {
+  const modal = document.getElementById("profileModal");
+  if (!modal) return;
+  modal.classList.add("hidden");
+  modal.style.display = "none";
+}
+
+// Главная инициализация
+function init() {
   load();
-  ensureQuests();
-  resetQuestsIfNeeded();
+  ensureQuests?.();
+  resetQuestsIfNeeded?.();
 
-  tabsInit();
-
-  // Inputs / buttons
-  $("#addTask")?.addEventListener("click", ()=>{
-    const v = ($("#newTask")?.value || "").trim();
-    if(!v) return;
-    const rec = ensureTodayRec();
-    rec.tasks.push({ text:v, done:false });
-    $("#newTask").value = "";
-    save(); renderDay();
+  // Навигация вкладок
+  document.querySelectorAll(".tab, .icon-btn").forEach(btn => {
+    btn.addEventListener("click", () => {
+      const v = btn.getAttribute("data-view");
+      if (v) switchView(v);
+    });
   });
-  $("#newTask")?.addEventListener("keydown", (e)=>{ if(e.key==="Enter") $("#addTask").click(); });
 
-  $("#profBtn")?.addEventListener("click", ()=> $("#profileModal")?.classList.remove("hidden"));
-  document.getElementById("modalClose").onclick = () => {
-  closeProfile();
-};
-  document.getElementById("saveProfile").onclick = () => {
-  const name = ($("#profName")?.value || "").trim();
-  const goal = ($("#profGoal")?.value || "").trim();
+  // Задачи дня
+  document.getElementById("addTask")?.addEventListener("click", () => {
+    const input = document.getElementById("newTask");
+    const v = (input?.value || "").trim();
+    if (!v) return;
+    const rec = ensureTodayRec?.() || { tasks: [], tasksDone: 0 };
+    rec.tasks.push({ text: v, done: false });
+    if (input) input.value = "";
+    if (typeof save === "function") save();
+    if (typeof renderDay === "function") renderDay();
+  });
+  document.getElementById("newTask")?.addEventListener("keydown", (e) => {
+    if (e.key === "Enter") document.getElementById("addTask")?.click();
+  });
 
-  if (!name) {
-    alert("Введите имя");
-    return;
+  // Профиль
+  document.getElementById("profBtn")?.addEventListener("click", () => {
+    const m = document.getElementById("profileModal");
+    if (m) { m.classList.remove("hidden"); m.style.display = "grid"; }
+  });
+  document.getElementById("modalClose")?.addEventListener("click", closeProfile);
+  document.getElementById("saveProfile")?.addEventListener("click", () => {
+    const name = (document.getElementById("profName")?.value || "").trim();
+    const goal = (document.getElementById("profGoal")?.value || "").trim();
+    if (!name) { alert("Введите имя"); return; }
+    if (!goal) { alert("Введите главную цель"); return; }
+    state.profile.name = name;
+    state.profile.goal = goal;
+    if (typeof save === "function") save();
+    if (typeof renderProfileMini === "function") renderProfileMini();
+    closeProfile();
+    switchView("day");
+  });
+
+  // Аватар
+  const inp = document.getElementById("avatarInput");
+  if (inp) {
+    inp.addEventListener("change", () => {
+      const f = inp.files?.[0];
+      if (!f) return;
+      const r = new FileReader();
+      r.onload = () => { state.profile.avatar = r.result; if (typeof save === "function") save(); if (typeof renderProfileMini === "function") renderProfileMini(); };
+      r.readAsDataURL(f);
+    });
   }
-  if (!goal) {
-    alert("Введите главную цель");
-    return;
-  }
 
-  state.profile.name = name;
-  state.profile.goal = goal;
-  save();
-  renderProfileMini();
-  closeProfile();
+  // Рендеры
+  if (typeof renderProfileMini === "function") renderProfileMini();
+  if (typeof renderDay === "function") renderDay();
+  if (typeof renderQuests === "function") renderQuests();
+  if (typeof updateHero === "function") updateHero();
 
-  // ✅ Обновление вкладки «День»
-  switchView("day");
-};
-  $("#shareBtn")?.addEventListener("click", ()=> alert("Поделиться добавим позже 👀"));
-
-  attachAvatar();
-  renderProfileMini();
-
-  // Порядок важен: сначала показать экран (если нужно), потом повесить обработчик
+  // Порядок важен: сначала показ, потом привязка
   showOnboardIfNeeded();
   bindOnboardButton();
-
-  // Стартовый рендер
-  renderDay();
-  renderQuests();
-  updateHero();
 }
+
+// Инициализация ТОЛЬКО после полной загрузки страницы
 window.addEventListener("load", init);
+
+// === PATCH END ===
