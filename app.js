@@ -246,21 +246,11 @@ function tabsInit(){
 
 /* --- Onboarding (goal required + animation) --- */
 function showOnboardIfNeeded(){
-  const ob = $("#onboard");
-  if(!ob) return;
+function showOnboardIfNeeded(){
   if(!state.profile.name || !state.profile.goal){
     ob.classList.remove("hidden");
   }else{
     ob.classList.add("hidden");
-ob.style.display = "none";;
-     const ob = document.getElementById("onboard");
-if (ob) {
-  ob.classList.add("hidden");
-  ob.style.display = "none";
-}
-
-switchView("day");  
-document.getElementById("dayView").classList.add("active");
     switchView("day");
   }
 }
