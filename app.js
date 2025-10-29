@@ -369,5 +369,4 @@ function init(){
   renderQuests();
   updateHero();
 }
-
 window.addEventListener("load", init);
